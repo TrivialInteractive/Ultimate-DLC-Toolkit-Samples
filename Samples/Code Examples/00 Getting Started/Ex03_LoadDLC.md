@@ -3,7 +3,6 @@ Note that the DLC must be purchased and installed locally (IsAvailable = true) i
 Using this method requires a DRM provider such as Steamworks to be setup (More info in user guide), in which case the DRM provider will usually handle things like auto-delivery of content when purchased by the user.
 
 ```cs
-using System.Collections;
 using UnityEngine;
 using DLCToolkit;
 
