@@ -1,5 +1,5 @@
 ﻿This quick example shows how to check if a DLC with the given unique key has been purchased by the user and is installed locally.
-Using this method required a DRM provider such as Steamworks to be setup, in which case the DRM provider will usually handle things like auto-delivery of content when purchased by the usr.
+Using this method requires a DRM provider such as Steamworks to be setup (More info in user guide), in which case the DRM provider will usually handle things like auto-delivery of content when purchased by the user.
 
 ```cs
 using System.Collections;
