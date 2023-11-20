@@ -1,4 +1,5 @@
-This quick example shows how to load DLC content from an arbitrary file path. For most DLC cases this method will usually not be suitable, but it can be useful for loading add-on packs or other DLC content that should be installed by the user.
+This quick example shows how to load DLC content from an arbitrary file path. 
+For most DLC cases this method will usually not be suitable, but it can be useful for loading add-on packs or other DLC content that should be installed by the user.
 
 ```cs
 using UnityEngine;
