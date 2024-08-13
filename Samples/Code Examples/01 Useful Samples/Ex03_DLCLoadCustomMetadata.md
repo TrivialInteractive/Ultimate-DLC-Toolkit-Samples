@@ -21,7 +21,7 @@ IDLCMetadata metadata = dlc.Metadata;
 ```
 
 ##### Access Custom Metadata
-Once we have gained access to the `IDLCMetadata` for the DLC content using one of the above approaches, we can now fetch the custom metadata element using the following methods (This example assumes that a custom metadata type named `ExampleMetadata ` has been created (As per the previous sample)), assigned and built as part of the DLC): 
+Once we have gained access to the `IDLCMetadata` for the DLC content using one of the above approaches, we can now fetch the custom metadata element using the following methods (This example assumes that a custom metadata type named `ExampleMetadata` has been created (As per the previous sample), assigned and built as part of the DLC): 
 ```cs
 // Fetch metadata element using one of the above approachs
 IDLCMetadata metadata = ...
