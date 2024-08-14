@@ -1,6 +1,6 @@
-﻿This quick example shows how to list all published DLC that are available for the game using the DRM provider if available. 
-Using this method requires a DRM provider such as Steamworks to be setup (More info in user guide), in which case all published DLC unique keys will be listed even if the user has not purchased or subscribed.
-Note that some DRM platforms do not support listing all published DLC content, but there is another option shown below in that case.
+﻿This quick example shows how you can request that a specific DLC content is installed on demand. You need to provide the DLC unique key of the DLC you want to install.
+Not all DRM providers will support installing on demand, in which case the request would fail with some error status. The DLC will need to be owned or added to the users account in order for the DRM service to commence installation of the DLC, otherwise the install request will likley fail with an error status. 
+Installation may take some time to complete, but usually if the game exists during an install request, the DRM service (Steam, Google Play) will continue with the download/installation until completed, and next time the game launches the DLC will now be available.
 
 ```cs
 using System.Collections;
@@ -11,44 +11,21 @@ public class Example : MonoBehaviour
 {
 	IEnumerator Start()
 	{
-		// Try to get all published DLC unique keys from the DRM provider.
-		DLCAsync<string[]> request = DLC.RemoteDLCUniqueKeysAsync;
+		// Create the install request - use Steam AppId DLC key as the unique key for this example
+		DLCAsync request = DLC.RequestInstall("2683920");
 
-		// Wait for request to complete
+		// Wait for the install to complete - other code can run in the meantime as this does not block the game
 		yield return request;
 
-		// Check for successful
-		if(request.Success == false)
+		// Check for installed
+		if(request.IsSuccessful == true)
 		{
-			Debug.LogError("An error occurred while listing the published dlc keys");
-			return;
+			Debug.Log("DLC was installed!");
 		}
-
-		// Report all unique keys
-		foreach(string uniqueKey in request.Result)
-			Debug.Log("Unique Key = " + uniqueKey);
-	}
-}
-```
-
-As mentioned above, not all DRM providers will support listing published unique keys.
-In such a case (Where the above call to `RemoteDLCUniqueKeysAsync` would throw a `NotSupportedException`) you can use the local alternative which will be able to list unique keys for all DLC content at the time of building the game.
-It is possible for new DLC content to be published and for the game to not be aware of it, so you should be aware that this approach may not find all DLC if the game is not fully up to date.
-
-```cs
-using UnityEngine;
-using DLCToolkit;
-
-public class Example : MonoBehaviour
-{
-	void Start()
-	{
-		// Try to get all local DLC unique keys that were available when this version of the game was built
-		string[] uniqueKeys = DLC.LocalDLCUniqueKeys;
-
-		// Report all unique keys
-		foreach(string uniqueKey in uniqueKeys)
-			Debug.Log("Unique Key = " + uniqueKey);
+		else
+		{
+			Debug.LogError("DLC could not be installed: " + request.Status);
+		}
 	}
 }
 ```
