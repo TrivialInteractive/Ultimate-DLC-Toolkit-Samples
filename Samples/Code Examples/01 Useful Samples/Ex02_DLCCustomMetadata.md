@@ -8,35 +8,35 @@ using DLCToolkit;
 [Serializable]
 public class ExampleMetadata : DLCCustomMetadata
 {
-  [Serializable]
-  class Nested
-  {
-    public string nestedField;
-  }
-
-  // ### The following fields WILL be serialized ###
-  public string myStringField = "hello";
-
-  [SerializeField]
-  private int myNumberField = 1234;
-
-  [SerializeField]
-  internal Vector3 myVectorField = new Vector3(1.0f, 1.5f, 2.0f);
-
-  public double[] myDoubleArray;
-
-  [SerializeField]
-  protected List<Vector2> myVector2List;
-
-  [SerializeField]
-  private Nested nested;
-
-
-  // ### The following fields WILL NOT be serialized ###
-  public UnityEngine.Object myAssetReference;
-
-  [SerializeField]
-  private UnityEngine.Texture2D[] myTextureArray;
+        [Serializable]
+        class Nested
+        {
+                public string nestedField;
+        }
+        
+        // ### The following fields WILL be serialized ###
+        public string myStringField = "hello";
+        
+        [SerializeField]
+        private int myNumberField = 1234;
+        
+        [SerializeField]
+        internal Vector3 myVectorField = new Vector3(1.0f, 1.5f, 2.0f);
+        
+        public double[] myDoubleArray;
+        
+        [SerializeField]
+        protected List<Vector2> myVector2List;
+        
+        [SerializeField]
+        private Nested nested;
+        
+        
+        // ### The following fields WILL NOT be serialized ###
+        public UnityEngine.Object myAssetReference;
+        
+        [SerializeField]
+        private UnityEngine.Texture2D[] myTextureArray;
 }
 ```
 
