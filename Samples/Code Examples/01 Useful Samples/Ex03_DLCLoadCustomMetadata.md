@@ -28,7 +28,7 @@ IDLCMetadata metadata = ...
 
 // First we can check if there is any custom metadata included in the DLC
 if(metadata.HasCustomMetadata == true)
-  Debug.Log("Found custom metadata!");
+        Debug.Log("Found custom metadata!");
 
 // Access the DLC and convert to the metadata type
 ExampleMetadata customMetadata = metadata.GetCustomMetadata() as ExampleMetadata;
