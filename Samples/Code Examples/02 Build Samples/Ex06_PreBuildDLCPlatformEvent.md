@@ -11,11 +11,11 @@ using DLCToolkit.BuildTools.Events;
 [DLCPreBuildPlatformProfileAttribute]
 public class Example : DLCBuildPlatformProfileEvent
 {
-  // Called by the DLC build pipeline just before a platform build begins
-  public override void OnBuildProfileEvent(DLCProfile profile, DLCPlatformProfile platformProfile)
-  {
-    Debug.Log("Start building DLC: " + profile.DLCName);
-    Debug.Log("For target platform: " + platformProfile.PlatformFriendlyName);
-  }
+        // Called by the DLC build pipeline just before a platform build begins
+        public override void OnBuildProfileEvent(DLCProfile profile, DLCPlatformProfile platformProfile)
+        {
+                Debug.Log("Start building DLC: " + profile.DLCName);
+                Debug.Log("For target platform: " + platformProfile.PlatformFriendlyName);
+        }
 }
 ```
