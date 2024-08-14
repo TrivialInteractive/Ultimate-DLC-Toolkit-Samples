@@ -8,10 +8,10 @@ using DLCToolkit.BuildTools;
 [DLCPreBuildAttribute]
 public class Example : DLCBuildEvent
 {
-  // Called by the DLC build pipeline just before any DLC content build is started
-  public override void OnBuildEvent()
-  {
-    Debug.Log("DLC build has started!");
-  }
+        // Called by the DLC build pipeline just before any DLC content build is started
+        public override void OnBuildEvent()
+        {
+                Debug.Log("DLC build has started!");
+        }
 }
 ```
