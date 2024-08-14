@@ -11,13 +11,13 @@ using DLCToolkit.BuildTools.Events;
 [DLCPostBuildPlatformProfileAttribute]
 public class Example : DLCBuildPlatformProfileResultEvent
 {
-  // Called by the DLC build pipeline immediatley after a platform build has finished
-  // Similar to the platform pre build event, although the build task for the request will be provided containng information abou the platform build
-  public override void OnBuildProfileEvent(DLCProfile profile, DLCPlatformProfile platformProfile, DLCBuildTask result)
-  {
-    Debug.Log("Finished building DLC: " + profile.DLCName);
-    Debug.Log("For target platform: " + platformProfile.PlatformFriendlyName);
-    Debug.Log(result.Success ? ("Successful: " + result.OutputPath) : "Failure");
-  }
+        // Called by the DLC build pipeline immediatley after a platform build has finished
+        // Similar to the platform pre build event, although the build task for the request will be provided containng information abou the platform build
+        public override void OnBuildProfileEvent(DLCProfile profile, DLCPlatformProfile platformProfile, DLCBuildTask result)
+        {
+                Debug.Log("Finished building DLC: " + profile.DLCName);
+                Debug.Log("For target platform: " + platformProfile.PlatformFriendlyName);
+                Debug.Log(result.Success ? ("Successful: " + result.OutputPath) : "Failure");
+        }
 }
 ```
