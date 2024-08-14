@@ -8,10 +8,10 @@ using DLCToolkit.BuildTools;
 [DLCPostBuildAttribute]
 public class Example : DLCBuildEvent
 {
-  // Called by the DLC build pipeline just after a DLC build has finished
-  public override void OnBuildEvent()
-  {
-    Debug.Log("DLC build has finished!");
-  }
+        // Called by the DLC build pipeline just after a DLC build has finished
+        public override void OnBuildEvent()
+        {
+                Debug.Log("DLC build has finished!");
+        }
 }
 ```
