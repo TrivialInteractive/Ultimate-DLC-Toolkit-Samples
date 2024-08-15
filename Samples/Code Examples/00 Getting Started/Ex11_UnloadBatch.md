@@ -1,54 +1,60 @@
-﻿This quick example shows how to list all published DLC that are available for the game using the DRM provider if available. 
-Using this method requires a DRM provider such as Steamworks to be setup (More info in user guide), in which case all published DLC unique keys will be listed even if the user has not purchased or subscribed.
-Note that some DRM platforms do not support listing all published DLC content, but there is another option shown below in that case.
+﻿This quick example shows how you can unload multiple DLC in batches with a single call.
 
 ```cs
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using DLCToolkit;
 
 public class Example : MonoBehaviour
 {
-	IEnumerator Start()
+	void OnDestroy()
 	{
-		// Try to get all published DLC unique keys from the DRM provider.
-		DLCAsync<string[]> request = DLC.RemoteDLCUniqueKeysAsync;
+		// This example assumes that you already have an enumerable of loaded dlc's (It can be an array, list or anything really)
+		IEnumerable<DLCContent> dlcs = ...
 
-		// Wait for request to complete
-		yield return request;
+		// Should we also unload assets that are currently in use
+		// For example if a DLC prefab instance is in use.
+		bool withAssets = true;
 
-		// Check for successful
-		if(request.Success == false)
-		{
-			Debug.LogError("An error occurred while listing the published dlc keys");
-			return;
-		}
-
-		// Report all unique keys
-		foreach(string uniqueKey in request.Result)
-			Debug.Log("Unique Key = " + uniqueKey);
+		// Unload all as a single operation
+		DLC.UnloadDLCBatch(dlcs, withAssets);
 	}
 }
 ```
 
-As mentioned above, not all DRM providers will support listing published unique keys.
-In such a case (Where the above call to `RemoteDLCUniqueKeysAsync` would throw a `NotSupportedException`) you can use the local alternative which will be able to list unique keys for all DLC content at the time of building the game.
-It is possible for new DLC content to be published and for the game to not be aware of it, so you should be aware that this approach may not find all DLC if the game is not fully up to date.
+It is also possible to batch unload asynchronously so that the game thread is not interrupted. You can optionally wait on the unload operation which will only continue once all DLCs have been unloaded, or just fire and forget:
 
 ```cs
+using System.Collections;
+using System.Collections.Generics;
 using UnityEngine;
 using DLCToolkit;
 
 public class Example : MonoBehaviour
 {
-	void Start()
+	void OnDestroy()
 	{
-		// Try to get all local DLC unique keys that were available when this version of the game was built
-		string[] uniqueKeys = DLC.LocalDLCUniqueKeys;
+		StartCoroutine(DestroyAsync())
+	}
 
-		// Report all unique keys
-		foreach(string uniqueKey in uniqueKeys)
-			Debug.Log("Unique Key = " + uniqueKey);
+	IEnumerator DestroyAsync()
+	{
+		// This example assumes that you already have an enumerable of loaded dlc's (It can be an array, list or anything really)
+		IEnumerable<DLCContent> dlcs = ...
+
+		// Should we also unload assets that are currently in use
+		// For example if a DLC prefab instance is in use.
+		bool withAssets = true;
+
+		// Unload all as a single operation
+		DLCAsync async = DLC.UnloadDLCBatch(dlcs, withAssets);
+
+		// We can wait for it to finish if required
+		// This is optional and you can just use `DLC.UnloadDLCBatch(dlcs, withAssets)` if you are not interested in running code after the unload has completed
+		yield return async;
+
+		// Run code after the unload has finished
+		Debug.Log("Completed batch unloading DLC async!");
 	}
 }
 ```
