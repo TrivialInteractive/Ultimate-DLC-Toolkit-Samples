@@ -68,3 +68,34 @@ public class Example : MonoBehaviour
 	}
 }
 ```
+
+Assets can also be loaded asynchronously which can be helpful for large assets where you don't want to freeze the game temporarily while the loading occurs. Loading is performed on a background thread and you wan wait for that to complete in a coroutine or similar:
+
+```cs
+using UnityEngine;
+using DLCToolkit;
+
+public class Example : MonoBehaviour
+{
+	void Start()
+	{
+		// This example assumes that we have already found the asset to load via one of the above approaches
+		DLCSharedAsset assetToLoad = ...
+
+		// Load async will return an awaitable object
+		DLCAsync<GameObject> async = assetToLoad.LoadAsync<GameObject>();
+
+		// Wait for the load to complete - the game can continue running in the meantime
+		yield return async;
+
+		// Check for successful and get the actual asset
+		if(async.IsSuccessful == true)
+		{
+			// Get the Unity asset
+			GameObject loadedPrefab = async.Result;
+
+			// Todo - Do something with the loaded asset
+		}
+	}
+}
+```
