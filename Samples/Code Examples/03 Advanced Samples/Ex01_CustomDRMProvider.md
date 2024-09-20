@@ -2,7 +2,7 @@ Ultimate DLC Toolkit includes built-in DRM support for a few DRM service provide
 
 * **GetDLCUniqueKeysAsync: (Async, Optional)** Fetches all unique keys for available DLC via the DRM provider. Many DRM services such as Steam provide a means of listing all published DLC, however a few services may not support this, and for that reason it is optional.
 * **IsDLCAvailableAsync: (Async, Required)** Checks whether the specified DLC unique key is owned by the user and installed on the device.
-* **GetDLCStream: (Required)** Get the DLC IO stream for the installed DLC from the DLC unique key provided.
+* **GetDLCStream: (Async, Required)** Get the DLC IO stream for the installed DLC from the DLC unique key provided.
 * **RequestInstallDLCAsync: (Async, Optional)** Request that the DRM service begins installing the DLC on demand if not already installed and if the service supports it.
 * **RequestUninstallDLC: (Optional)** Request that the DRM service begins uninstalling the DLC from the user device if supported.
 * **TrackDLCUsage: (Optional)** Inform the DRM service when the DLC is loaded or unloaded by the game so that it is posisble to track DLC play time or similar. For example, Steam supports tracking the amount of play time for a particular DLC.
@@ -43,12 +43,12 @@ public class ExampleDRM : IDRMProvider
                 return async;
         }
 
-        public DLCStreamProvider GetDLCStream(string uniqueKey)
+        public DLCAsync<DLCStreamProvider> GetDLCStream(IDLCAsyncProvider asyncProvider, string uniqueKey)
         {
                 // Call some fictional API to find out the install location of the DLC
                 // If the DRM service requires an async call to determine install location, we would recommend performing that in `GetDLCUniqueKeysAsync` and caching the results in a dictionary or similar
                 string dlcPath = SomeAPI.GetDLC(uniqueKey).installPath;
-                return DLCStreamProvider.FromFile(dlcPath);
+                return DLCAsync<DLCStreamProvider>.Completed(true, DLCStreamProvider.FromFile(dlcPath));
         }
 
         public DLCAsync RequestInstallDLCAsync(IDLCAsyncProvider asyncProvider, string uniqueKey)
