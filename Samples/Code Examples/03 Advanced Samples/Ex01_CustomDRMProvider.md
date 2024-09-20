@@ -127,9 +127,9 @@ public class Example : MonoBehaviour
 ```
 
 ##### DLCAsync Tips
-As per the above example code, many of the interface calls are async and accept some variation of the `DLCAsync` type as the return value. There are static convenience methods such as `Completed` and `Error` as used above for quickly returning an async object with a given state.  
+As per the above example code, many of the interface calls are async and use some variation of the `DLCAsync` type as the return value. There are static convenience methods such as `Completed` and `Error` as used above for quickly returning an async object with a given state.  
   
-Additionally you can create an async object using the constructor as shown below where you can provide an optional bool `awaitable`. If your DRM provider uses coroutines to send requests or similar, then it is highly recommended that you disable the `awaitable` option, as otherwise it can cause the application to freeze when using a synchronous call (`LoadDLC` for example) until the operation times out (10 seconds by default). This is because DRM calls must be awaited in synchronous methods, which means blocking the main thread until until completed, which in the case of the coroutine will mean that it is not updated by Unity during that time and will not be able to be completed.
+Additionally you can create an async object using the constructor as shown below where you can provide an optional bool `awaitable`. If your DRM provider uses coroutines to send requests or similar, then it is highly recommended that you disable the `awaitable` option, as otherwise it can cause the application to freeze when using a synchronous call (`LoadDLC` for example will use async methods in the DRM provider, but will attempt to block the main thread until they complete) until the operation times out (10 seconds by default). This is because DRM calls must be awaited in synchronous methods, which means blocking the main thread until completed, which in the case of the coroutine will mean that it is not updated by Unity during that time and will not be able to be completed.
 ```cs
 // Create a non awaitable operation - will throw an exception when used in a synchronous call to avoid freeze until timeout
 DLCAsync<string[]> asyncNonAwaitable = new DLCAsync<string[]>(false);
@@ -144,8 +144,8 @@ In many cases it is ideal to use a coroutine to make the async request of the DR
 ```cs
 DLCAsync<string> ExampleCoroutineAsync(IDLCAsyncProvider asyncProvider)
 {
-    // Create an async object
-    DLCAsync<string> async = new DLCAsync<string>();
+    // Create an async object - disable waiting as it could cause the game to freeze when using coroutines
+    DLCAsync<string> async = new DLCAsync<string>(false);
 
     // Run coroutine - asyncProvider allows coroutines to be easily started
     asyncProvider.RunAsync(ExampleRoutine(async));
@@ -161,8 +161,32 @@ IEnumerator ExampleRoutine(DLCAsync<string> async)
         // Wait for completed
         yield return request.SendWebRequest();
 
-        // IMPORTANT - We need to call `Complete` or `Error` on the async operation, otherwise it will wait forever
+        // IMPORTANT - We need to call `Complete` or `Error` on the async operation once finished, otherwise it will wait forever
         async.Complete(request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
     }
+}
+```
+
+###### Running a threaded call
+
+In other cases such as using normal C# web requests, it is possible that a true async call will be made where the code runs on a separate thread, unlike a coroutine which runs on the main thread but uses a staggered update method. In such a case a common pattern for implementing the async API could be something like this:
+```cs
+DLCAsync<string> ExampleThreadAsync(IDLCAsyncProvider asyncProvider)
+{
+    // Create an async object
+    DLCAsync<string> async = new DLCAsync<string>();
+
+    // Run some threaded call
+    ThreadPool.QueueUserWorkItem((object state) =>
+    {
+        // Run the main call that will take up the time
+        string result = DoSomeOperationThatTakesSomeTime();
+
+        // IMPORTANT - We need to call `Complete` or `Error` on the async operation once finished, otherwise it will wait forever
+        async.Complete(result != null, result);
+    });
+
+    // Return the async operation now - we will update it later
+    return async;
 }
 ```
