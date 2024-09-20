@@ -125,3 +125,44 @@ public class Example : MonoBehaviour
         }
 }
 ```
+
+##### DLCAsync Tips
+As per the above example code, many of the interface calls are async and accept some variation of the `DLCAsync` type as the return value. There are static convenience methods such as `Completed` and `Error` as used above for quickly returning an async object with a given state.  
+  
+Additionally you can create an async object using the constructor as shown below where you can provide an optional bool `awaitable`. If your DRM provider uses coroutines to send requests or similar, then it is highly recommended that you disable the `awaitable` option, as otherwise it can cause the application to freeze when using a synchronous call (`LoadDLC` for example) until the operation times out (10 seconds by default). This is because DRM calls must be awaited in synchronous methods, which means blocking the main thread until until completed, which in the case of the coroutine will mean that it is not updated by Unity during that time and will not be able to be completed.
+```cs
+// Create a non awaitable operation - will throw an exception when used in a synchronous call to avoid freeze until timeout
+DLCAsync<string[]> asyncNonAwaitable = new DLCAsync<string[]>(false);
+
+// Create an awaitable operation (Default) - If you are using C# threads or Task.Run for the API request, then it is possible for usually async calls to be awaited by blocking the main thread in the case of a synchronous call such as `LoadDLC`
+DLCAsync<bool> asyncAwaitable = new DLCAsync<bool>()
+```
+
+###### Running a coroutine as part of the async API.  
+  
+In many cases it is ideal to use a coroutine to make the async request of the DRM provider, in the case that you are using `UnityWebRequest` or similar as an example to make an API call. In that case a common pattern is to hand off an async operation to the coroutine which will update the operation upon completion. You will note that all Async methods pass in a `IDLCAsyncProvider` for this purpose:
+```cs
+DLCAsync<string> ExampleCoroutineAsync(IDLCAsyncProvider asyncProvider)
+{
+    // Create an async object
+    DLCAsync<string> async = new DLCAsync<string>();
+
+    // Run coroutine - asyncProvider allows coroutines to be easily started
+    asyncProvider.RunAsync(ExampleRoutine(async));
+
+    // Return the async operation now - we will update it later
+    return async;
+}
+
+IEnumerator ExampleRoutine(DLCAsync<string> async)
+{
+    using(UnityWebRequest request = UnityWebRequest.Get("mydlcservice.com"))
+    {
+        // Wait for completed
+        yield return request.SendWebRequest();
+
+        // IMPORTANT - We need to call `Complete` or `Error` on the async operation, otherwise it will wait forever
+        async.Complete(request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
+    }
+}
+```
