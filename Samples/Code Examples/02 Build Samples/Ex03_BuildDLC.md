@@ -1,5 +1,5 @@
 For advanced users and automation purposes, Ultimate DLC Toolkit offers full build support from an editor script if you need to build DLC from custom tools or as part of a custom build pipeline. 
-The DLC build pipeline is a batched build process, meaning that any number of DLC profiles can be built as part of a single operation, for any number of platforms, or you can just build a single DLC profile depending upon your needs. For that reason there are a number of build API's to consider so that we do not place any limitations on what you can achieve via editor scripting.
+The DLC build pipeline is a batched build process, meaning that any number of DLC profiles can be built as part of a single operation, for any number of platforms, or you can just build a single DLC profile depending upon your needs. For that reason there are a number of build API's to consider so that we do not place any limitations on what you can achieve via editor scripting.  
 Firstly you can build all enabled DLC profiles in the project with a single call:
 ```cs
 using DLCToolkit.BuildTools;
