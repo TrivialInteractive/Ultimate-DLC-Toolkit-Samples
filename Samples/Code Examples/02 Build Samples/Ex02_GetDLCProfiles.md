@@ -1,4 +1,4 @@
-When working with DLC content from and editor script, a common requirement is to be able to find all DLC profiles that are part of the project. You could use the Unity asset database as these assets are simply scriptable objects, but we have also included API's to help with that and offer filtering in addition to search by platform for example.
+When working with DLC content from an editor script, a common requirement is to be able to find all DLC profiles that are part of the project. You could use the Unity asset database as these assets are simply scriptable objects, but we have also included API's to help with that and offer filtering in addition to search by platform for example.
 Firstly you can find a specific DLC profile if you already know the DLC profile name you are looking for, or the unique key:
 ```cs
 using DLCToolkit.BuildTools;
