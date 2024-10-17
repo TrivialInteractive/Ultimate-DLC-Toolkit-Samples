@@ -33,3 +33,20 @@ public class Example
         }
 }
 ```
+After that you can change any property in the profile from code, and the changes will be saved automatically inb the Unity project:
+```cs
+using DLCToolkit.BuildTools;
+using DLCToolkit.Profile;
+
+public class Example
+{
+        static void CreateDLCProfile()
+        {
+                // Created in the previous example
+                DLCProfile createdProfile = ...
+
+                createdProfile.Description = "A test profile created from script";
+                createdProfile.Publisher = "Trivial Interactive";
+        }
+}
+```
