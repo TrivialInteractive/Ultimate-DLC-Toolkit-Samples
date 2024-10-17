@@ -135,7 +135,7 @@ Additionally you can create an async object using the constructor as shown below
 DLCAsync<string[]> asyncNonAwaitable = new DLCAsync<string[]>(false);
 
 // Create an awaitable operation (Default) - If you are using C# threads or Task.Run for the API request, then it is possible for usually async calls to be awaited by blocking the main thread in the case of a synchronous call such as `LoadDLC`
-DLCAsync<bool> asyncAwaitable = new DLCAsync<bool>()
+DLCAsync<string[]> asyncAwaitable = new DLCAsync<string[]>()
 ```
 
 ###### Running a coroutine as part of the async API.  
