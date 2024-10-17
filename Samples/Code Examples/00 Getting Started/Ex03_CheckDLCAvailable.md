@@ -15,7 +15,7 @@ public class Example : MonoBehaviour
 	IEnumerator Start()
 	{
 		// Check if the dlc is available - requires a DRM provider to be available for the current platform such as Steamworks
-		DLCAsync<bool> request = DLC.IsAvailable(dlcKey);
+		DLCAsync request = DLC.IsAvailable(dlcKey);
 
 		// Wait for request to complete
 		yield return request;
@@ -23,12 +23,12 @@ public class Example : MonoBehaviour
 		// Check for successful
 		if(request.Success == false)
 		{
-			Debug.LogError("An error occurred while checking the dlc status");
+			Debug.LogError("DLC is not available or an error occurred while checking the dlc status");
 			return;
 		}
 
 		// Check for available
-		Debug.Log("Available = " + request.Result);
+		Debug.Log("DLC is available!");
 	}
 }
 ```
