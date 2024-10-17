@@ -94,3 +94,110 @@ public class Example
         }
 }
 ```
+#### Build Options
+All of the mentioned build API's also support an additiona build options argument if you need more control over the build. The following options can be specified and combined as flags to change the build behaviour:
+```cs
+using DLCToolkit.BuildTools;
+using DLCToolkit.Profile;
+
+public class Example
+{
+        static void BuildOptions()
+        {
+                DLCBuildOptions options = DLCBuildOptions.None;
+
+                // Forces the build pipeline to also build DLC content that is disabled in the DLC profile asset
+                options |= DLCBuildOptions.IncludeDisabledDLC;
+
+                // Ultimate DLC Toolkit uses incremental building to speed up subsequent builds. You can force all data to be rebuilt with the following option, build the build may take significantly longer
+                options |= DLCBuildOptions.ForceRebuild;
+
+                // Ultimate DLC Toolkit supports adding additionl scripting content that was not part of the base game on some Mono platforms. You can disable that feature support using this option (Note that sciprts used from the base game will still work just fine in the DLC)
+                options |= DLCBuildOptions.DisableScripting;
+
+                // Force new DLC scripts to be compiled in debug mode with symbols to support debugging (Experimental)
+                options |= DLCBuildOptions.DebugScription;
+
+
+                // These build options can be provided to any build API, for example:
+                DLCBuildPipeline.BuildAllDLCContent(null, null, options);
+        }
+}
+```
+#### Build Result
+All of the mentioned build API's also return a `DLCBuildResult` object containing detailed information about the build that was requested, including information about successful and failed builds.
+```cs
+using DLCToolkit.BuildTools;
+using DLCToolkit.Profile;
+
+public class Example
+{
+        static void BuildResult()
+        {
+                // Assumes that the build result has been returned by one of the build API's mentioned above
+                DLCBuildResult result = ...
+
+                // Firstly we can check whether all builds were successful, since the build API is batched it is normally dealing with multiple builds as a single request.
+                Debug.Log("Successful: " + result.AllSuccessful);
+
+                // We can check how many builds were successful and how many failed (Note that there is 1 build per profile per platform)
+                Debug.Log("Successful Count: " + result.BuildSuccessCount + ", Failed Count: " + result.BuildFailedCount);
+
+                // There is also information available about the build start time and duration
+                Debug.Log("Build Start Time: " + result.BuildStartTime);
+                Debug.Log("Build Elapsed Time: " + result.ElapsedBuildTime);
+        }
+}
+```
+Next we can work with the `DLCBuildTask` objects included in the result, which each represent a specific build request for a specific platform.
+```cs
+using DLCToolkit.BuildTools;
+using DLCToolkit.Profile;
+
+public class Example
+{
+        static void BuildTaskResult()
+        {
+                // Assumes that the build result has been returned by one of the build API's mentioned above
+                DLCBuildResult result = ...
+
+                // We can find all successful build tasks as shown
+                foreach(DLCBuildTask task in result.GetSuccessfulBuildTasks())
+                        Debug.Log("Profile: " + task.Profile.DLCUniqueKey + ", Platform: " + task.PlatformProfile.PlatformFriendlyName);
+
+                // In a similar way we can also find all failed build tasks
+                foreach(DLCBuildTask task in result.GetFailedBuildTasks())
+                        Debug.Log("Profile: " + task.Profile.DLCUniqueKey + ", Platform: " + task.PlatformProfile.PlatformFriendlyName);
+        }
+}
+```
+Once we have a reference to a `DLCBuildTask` object, we can then examine it further to get additional information:
+```cs
+using DLCToolkit.BuildTools;
+using DLCToolkit.Profile;
+
+public class Example
+{
+        static void BuildTaskResult()
+        {
+                // Assumes that the build task reference has been acquired as shown in the above example
+                DLCBuildTask task = ...
+
+                // We can check if the build was successful, but we probably already know that at this point
+                Debug.Log("Successful: " + task.Success);
+
+                // We can access the DLC profile that was used for this build request, as well as the specfic platform profile
+                DLCProfile profile = task.Profile;
+                DLCPlatformProfile platformProfile = task.PlatformProfile;
+
+                Debug.Log("Build for: + platformProfile.PlatformFriendlyName);
+
+                // If the build was successful, we can get the otput file path of the built DLC content
+                Debug.Log("OutputPath: " + task.OutputPath;
+
+                // Finally we can also get the specific timings for this particular build task
+                Debug.Log("Build Start Time: " + task.BuildStartTime);
+                Debug.Log("Build Elapsed Time: " + task.ElapsedBuildTime);
+        }
+}
+```
