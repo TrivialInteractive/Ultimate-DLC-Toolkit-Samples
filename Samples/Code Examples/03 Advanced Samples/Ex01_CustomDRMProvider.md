@@ -27,16 +27,16 @@ public class ExampleDRM : IDRMProvider
         }
 
         // Check if the DLC is available
-        public DLCAsync<bool> IsDLCAvailableAsync(IDLCAsyncProvider asyncProvider, string uniqueKey)
+        public DLCAsync IsDLCAvailableAsync(IDLCAsyncProvider asyncProvider, string uniqueKey)
         {
-                DLCAsync<bool> async = new ();
+                DLCAsync async = new ();
 
                 // Launch some task that makes a request on a background thread
                 SomeAPI.FetchDLCStatus(uniqueKey, (Status s) =>
                 {
                         // Mark async as completed or failed - Required or the method will wait forever when called
                         if(s == Status.Owned)
-                                async.Complete(true, true);
+                                async.Complete(true);
                         else
                                 async.Error("DLC is not owned by the user");                        
                 });
