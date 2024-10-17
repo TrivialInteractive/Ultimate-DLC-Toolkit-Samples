@@ -1,6 +1,6 @@
 In most cases it is recommended to use DRM for managing and loading DLC content, but in some cases you may need more control over finding and loading local DLC that has been shipped with the game, or installed at some point. 
 For that reason we have created the `DLCDirectory` class which acts as a virtual DLC file browser to make it easier to find, list and load DLC content from a local folder.
-The DLC directory is only interested in working with valid loadbale DLC files. You can place any other type of file in the same directory along side your DLC, and those fles will simply be ignored by all API's, evn if they have the same file extension as a valid DLC.
+The DLC directory is only interested in working with valid loadable DLC files. You can place any other type of file in the same directory along side your DLC, and those fles will simply be ignored by all API's, even if they have the same file extension as a valid DLC.  
 First you need to create a new instance and provide the folder path where DLC content may be stored. it is also possible to search in subfolders if required as shown here:
 ```cs
 using DLCToolkit;
