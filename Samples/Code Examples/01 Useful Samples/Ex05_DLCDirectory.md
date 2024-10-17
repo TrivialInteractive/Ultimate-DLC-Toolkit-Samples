@@ -72,7 +72,7 @@ public class Example : MonoBehaviour
 }
 ```
 Finally it is possible to enable events for when DLC content is installed or removed in the DLC directory. This can be useful if you want to support hot swapping DLC for quick testing, or if you want to support install on demand, or any similar use case.
-First you will need to enable the directory events featre via the constrctor:
+First you will need to enable the directory events feature via the constrctor:
 ```cs
 using DLCToolkit;
 using UnityEngine;
