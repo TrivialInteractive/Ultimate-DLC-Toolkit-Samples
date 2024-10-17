@@ -12,7 +12,7 @@ public class Example : MonoBehaviour
         DLCDirectory directory = null;
         void Start()
         {
-                // Create a directory from a relative folder path#
+                // Create a directory from a relative folder path
                 // Note that the folder path must exist before hand, otherwise an exception will be thrown
                 directory = new DLCDirectory("DLC");
 
@@ -57,7 +57,7 @@ public class Example : MonoBehaviour
         DLCDirectory directory = ...;
         void FindDLC()
         {
-                Find or enumerate all DLC file paths located in the directory
+                // Find or enumerate all DLC file paths located in the directory
                 string[] dlcPaths = directory.GetDLCFiles();
                 IEnumerable<string> dlcPathsEnumerated = directory.EnumerateDLCFiles();
 
@@ -65,7 +65,7 @@ public class Example : MonoBehaviour
                 string[] dlcUniqueKeys = directory.GetDLCUniqueKeys();
                 IEnumerable<string> dlcUniqueKeysEnumerated = directory.EnumerateDLCniqeKeys();
 
-                Finally we can get the metadata or all DLC located in the directory
+                // Finally we can get the metadata or all DLC located in the directory
                 IDLCMetadata[] dlcMetadata = directory.GetAllDLC();
                 IEnmerable<IDLCMetadata> dlcMetadataEnmerated = directory.EnmerateAllDLC();
         }
