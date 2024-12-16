@@ -119,7 +119,7 @@ public class Example : MonoBehaviour
 	void Start()
 	{
 		// Load some DLC first
-		DLC.Load("MyDLCKey");
+		DLC.LoadDLC("MyDLCKey");
 
 		// Note that you can optionally provide a hint DLC unique key so that the load call will only search in this specific DLC content.
 		// You can leave this as null to search in all loaded DLC's
