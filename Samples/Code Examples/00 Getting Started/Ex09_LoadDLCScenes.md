@@ -228,7 +228,6 @@ public class Example : MonoBehaviour
 		// Check for found
 		Debug.Log("Load successful: " + request.Successful);
 		Debug.Log("Load status: " + result.Status);
-		Debug.Log("Loaded asset: " + request.Result);
 
 		// Allow the loading screen to be displayed for some time
 		yield return new WaitForSeconds(2f);
