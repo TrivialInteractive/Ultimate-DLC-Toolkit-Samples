@@ -1,5 +1,6 @@
-This short example will show how you can use the C# async/await feature to wait for any DLC async operation to complete. In the normal Unity workflow, coroutines are commonly used to wait until an async request has completed, but many users may prefer to use the C# async/await feature to interface better with game code, or simply for better code readability.
-All async operations in Ultimate DLC Toolkit will return either `DLCAsync` or `DLCAsync<>` objects which are custom enumerator objects that can be yielded in a coroutine. As of version `1.1`, there is now a `.Task` property which as the name suggests will return a C# `Task` object that can be used with async/await. 
+This short example will show how you can use the C# async/await feature to wait for any DLC async operation to complete. In the normal Unity workflow, coroutines are commonly used to wait until an async request has completed, but many users may prefer to use the C# async/await feature to interface better with game code, or simply for better code readability.  
+
+All async operations in Ultimate DLC Toolkit will return either `DLCAsync` or `DLCAsync<>` objects which are custom enumerator objects that can be yielded in a coroutine. As of version `1.1`, there is now a `.Task` property which as the name suggests will return a C# `Task` object that can be used with async/await.  
 
 Below is a quick code example of how you might wait for an async operation to complete, and then run further code on completion:
 ```cs
